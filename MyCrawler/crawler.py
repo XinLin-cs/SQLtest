@@ -48,8 +48,8 @@ def get_item(url):
         # 作者信息
         writer_name = soup.find(attrs={"class":"authi"}).text
         writer_year = soup.find(attrs={"class":"pil cl"}).contents[2].string
-        writer_school = soup.find(attrs={"class":"pil cl"}).contents[5].string
-        writer_targetschool = soup.find(attrs={"class":"pil cl"}).contents[8].string
+        writer_targetschool = soup.find(attrs={"class":"pil cl"}).contents[5].string
+        writer_school = soup.find(attrs={"class":"pil cl"}).contents[8].string
         # 生成数据
         item = {
             "url":url,
@@ -106,20 +106,28 @@ def get_item_thread(url,a,b):
     cnt += 1
     thq.put(item)
 
+def rollingbar_start(tot,b,c):
+    global cnt
+    bar = 0
+    while cnt<tot:
+        time.sleep(0.1)
+        if cnt>bar:
+            bar = cnt
+            rate = 100.0 * bar / tot
+            print("%.1f" % rate , "%")
+
 def work_by_thread(start_id , terminal_id):
     global thq , cnt
     tot = terminal_id - start_id
+    
+    _thread.start_new_thread( rollingbar_start , (tot, 1, 1) )
     for i in range(start_id,terminal_id):
         url = "http://cskaoyan.com/thread-%d-1-1.html"%i
         _thread.start_new_thread( get_item_thread, (url, 1, 1) )
         time.sleep(0.1)
-    bar = 0
-    while (cnt<tot):
-        time.sleep(0.1)
-        if (cnt>bar):
-            bar = cnt
-            rate = 100.0 * bar / tot
-            print("%.1f" % rate , "%")
+    
+    while cnt<tot:
+        time.sleep(1)
         
     itemlist = []
     while not thq.empty():
@@ -130,7 +138,7 @@ def work_by_thread(start_id , terminal_id):
 
 # 主函数
 if __name__ == '__main__':
-    start_id , terminal_id = 660000 , 660100
+    start_id , terminal_id = 660000 , 660500
     # itemlist = work_by_linear(start_id , terminal_id)
     itemlist = work_by_thread(start_id , terminal_id)
     save_as_csv(itemlist)
