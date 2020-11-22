@@ -8,10 +8,12 @@ from queue import Queue
 import _thread
 import time
 
+# 数据清洗 暂未使用
 def clear_data(str):
     str = re.sub('[\n\r]','',str)
     return str
 
+# 访问url 返回数据元组
 def get_item(url):
     try:
         res = request.urlopen(url)
@@ -74,6 +76,7 @@ def get_item(url):
         # print("ERROR: When request" , url , "WITH:", e)
         return None
 
+# 参数为数据表，保存为csv文件
 def save_as_csv(data):
     data_df = {}
     for it in data:
@@ -97,38 +100,50 @@ def work_by_linear(start_id , terminal_id):
     return itemlist
 
 # 多线程爬虫
-thq = Queue(maxsize=0)
-cnt = 0
+thq = Queue(maxsize=0) # 队列 暂存线程返回的数据
+cnt , success , fail = 0 , 0 , 0# 全局计数
 
 def get_item_thread(url,a,b):
-    global thq , cnt
+    global thq , cnt , success , fail
     item = get_item(url)
     cnt += 1
-    thq.put(item)
+    if not item is None:
+        success += 1
+        thq.put(item)
+    else:
+        fail += 1
 
 def rollingbar_start(tot,b,c):
     global cnt
     bar = 0
+    print("\r", "scanning websites %.1f" % (0) , "%" , end="")
+    t1 = time.time()
     while cnt<tot:
+        # 刷新主频
         time.sleep(0.1)
+        # 进度增加时刷新
         if cnt>bar:
             bar = cnt
             rate = 100.0 * bar / tot
-            print("%.1f" % rate , "%")
+            print("\r", "scanning websites %.1f" % rate , "%" , end="")
+    t2 = time.time()
+    print("\r", "scanning websites %.1f" % (100) , "%")
+    print("scanning finish, lasts for %d s!(tot:%d/success:%d/fail:%d)" % (t2-t1,cnt,success,fail))
 
-def work_by_thread(start_id , terminal_id):
+def work_by_threads(start_id , terminal_id):
     global thq , cnt
     tot = terminal_id - start_id
-    
+    # 绘制进度条
     _thread.start_new_thread( rollingbar_start , (tot, 1, 1) )
+    # 依次启动线程
     for i in range(start_id,terminal_id):
         url = "http://cskaoyan.com/thread-%d-1-1.html"%i
-        _thread.start_new_thread( get_item_thread, (url, 1, 1) )
+        _thread.start_new_thread( get_item_thread , (url, 1, 1) )
         time.sleep(0.1)
-    
+    # 主进程阻塞
     while cnt<tot:
         time.sleep(1)
-        
+    # 读出队列元素
     itemlist = []
     while not thq.empty():
         item = thq.get()
@@ -138,7 +153,8 @@ def work_by_thread(start_id , terminal_id):
 
 # 主函数
 if __name__ == '__main__':
-    start_id , terminal_id = 660000 , 660500
+    # start_id , terminal_id = 660000 , 660010
+    start_id , terminal_id = 660000 , 661000
     # itemlist = work_by_linear(start_id , terminal_id)
-    itemlist = work_by_thread(start_id , terminal_id)
+    itemlist = work_by_threads(start_id , terminal_id)
     save_as_csv(itemlist)
