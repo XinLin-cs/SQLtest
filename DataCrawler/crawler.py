@@ -87,7 +87,7 @@ def save_as_csv(data):
                 data_df[key] = []
             data_df[key].append(it[key])
     data_df = pd.DataFrame(data_df)
-    data_df.to_csv('bbsdata.csv', encoding="utf_8_sig")
+    data_df.to_csv('bbsdata.csv', encoding="utf_8_sig", sep='	')
 
 
 # 线性访问
