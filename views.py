@@ -1,19 +1,30 @@
-from flask import jsonify
+from flask import redirect
+from flask import render_template
+from flask import url_for
 from app import app
-from app import POST
+from DataManager.POST import POST
+from datetime import datetime
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+@app.route('/home/<page>')
+def home(page=1):
+    page = int(page)
+    left_id = page*20+1
+    right_id = page*20+20
+    post_list = POST.query.filter(POST.ID >= left_id)\
+        .filter(POST.ID <= right_id).all()
+    next_url = url_for('home', page=page+1)
+    return render_template(
+        'index.html',
+        title='Home Page',
+        year=datetime.now().year,
+        page=page,
+        post_list=post_list,
+        next_url=next_url,
+    )
 
 
-@app.route('/test', methods=['GET'])
-def get_data():
-    myData = POST.query.all()
-    output = []
-    for record in myData:
-        r_data = {}
-        r_data['postTitle'] = record.postTitle
-        output.append(r_data)
-    return jsonify({'message': output})
+@app.route('/jmpPage/<page>', methods=['GET'])
+def get_data(page):
+    return redirect(url_for('home', page=page))

@@ -3,13 +3,12 @@ from bs4 import BeautifulSoup
 from urllib import request
 import re
 import pandas as pd
-import string
 from queue import Queue
 import _thread
 import time
 
 
-# 数据清洗 暂未使用
+# 数据清洗
 def clear_data(text):
     text = re.sub('[\n\r]', '', text)
     text = re.sub('[,]', '，', text)
@@ -157,12 +156,3 @@ def work_by_threads(start_id, terminal_id):
         if item is not None:
             itemlist.append(item)
     return itemlist
-
-
-# 主函数
-if __name__ == '__main__':
-    # start_id, terminal_id = 660000, 660010
-    start_id, terminal_id = 660000, 661000
-    # itemlist = work_by_linear(start_id , terminal_id)
-    itemlist = work_by_threads(start_id, terminal_id)
-    save_as_csv(itemlist)
