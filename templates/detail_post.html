@@ -1,0 +1,58 @@
+{% extends "bootstrap/base.html"  %}
+{% block navbar %}
+    <!--侧边栏导航-->
+    <ul class="nav nav-list well" style="position: fixed; width: 10%; height:100%; z-index: 10">
+        <li class="nav-header">修改帖子</li>
+        <li><a href={{ url_for('delete_post',postID=post.ID) }}>删除</a></li>
+        <li><a href="#" onclick="window.history.back()">取消</a></li>
+    </ul>
+
+    <!--数据控制台-->
+    <div>
+        <div class="container"  style="min-height: 800px">
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <form class="form" role="update" action={{ url_for("update_post") }} method="POST">
+                      <div class="form-group">
+                        <label for="name">ID</label>
+                        <input type="text" class="form-control" name="ID" placeholder="请输入名称" value={{ post.ID }}>
+                      <div class="form-group">
+                        <label for="name">url</label>
+                        <input type="text" class="form-control" name="url" placeholder="请输入名称" value={{ post.url }}>
+                      </div>
+                      <div class="form-group">
+                        <label for="name">postTime</label>
+                        <input type="text" class="form-control" name="postTime" placeholder="请输入名称" value={{ post.postTime }}>
+                      </div>
+                        <div class="form-group">
+                        <label for="name">postTitle</label>
+                        <input type="text" class="form-control" name="postTitle" placeholder="请输入名称" value={{ post.postTitle }}>
+                      </div>
+                        <div class="form-group">
+                        <label for="name">postContent</label>
+                        <input type="text" class="form-control" name="postContent" placeholder="请输入名称" value={{ post.postContent }}>
+                      </div>
+                        <div class="form-group">
+                        <label for="name">writerName</label>
+                        <input type="text" class="form-control" name="writerName" placeholder="请输入名称" value={{ post.writerName }}>
+                      </div>
+                        <div class="form-group">
+                        <label for="name">writerYear</label>
+                        <input type="text" class="form-control" name="writerYear" placeholder="请输入名称" value={{ post.writerYear }}>
+                      </div>
+                        <div class="form-group">
+                        <label for="name">writerSchool</label>
+                        <input type="text" class="form-control" name="writerSchool" placeholder="请输入名称" value={{ post.writerSchool }}>
+                      </div>
+                        <div class="form-group">
+                        <label for="name">writerTarget</label>
+                        <input type="text" class="form-control" name="writerTarget" placeholder="请输入名称" value={{ post.writerTarget }}>
+                      </div>
+                      <button type="submit" class="btn btn-default">提交</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
