@@ -1,5 +1,16 @@
 {% extends "bootstrap/base.html"  %}
 {% block navbar %}
+    <!--侧边栏导航-->
+    <ul class="nav nav-list well" style="position: fixed; width: 10%; height:100%; z-index: 10">
+        <li class="nav-header">数据库</li>
+        <li><a href="#">帖子</a></li>
+        <li><a href="#">作者</a></li>
+        <li class="nav-header">其他</li>
+        <li><a href="https://github.com/ArComet/SQLtest">帮助</a></li>
+        <li><a href={{ url_for('home') }}>返回</a></li>
+    </ul>
+
+
     <!--主页内容-->
     <div style="background-image: url('/static/images/bg1.jpg'); background-size:contain;">
         <div class="container" >
@@ -64,19 +75,7 @@
                             </ul>
                         </div>
                     </nav>
-                    <!--横幅-->
-                    <div class="jumbotron">
-                        <h1>
-                            Hello, world!
-                        </h1>
-                        <p>
-                            This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-                        </p>
-                        <p>
-                             <a class="btn btn-primary btn-large" href="#">Learn more</a>
-                        </p>
-                    </div>
-                    <!--帖子列表-->
+
                     <div class="panel-group" id="panel-422177">
                         {% for post in post_list %}
                         <div class="panel panel-default">
@@ -114,17 +113,6 @@
 
                         {% endfor %}
                     </div>
-                    <nav style="text-align: center;">
-                        <ul class="pagination">
-                            <li><a href="#">Prev</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="{{ next_url }}">Next</a></li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
