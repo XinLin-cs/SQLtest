@@ -2,24 +2,23 @@ from flask import redirect
 from flask import render_template
 from flask import url_for
 from flask import request
+from sqlalchemy import func, desc
+
 from app import app
 from app import db
+from DataManager.WRITER import WRITER
+from DataManager.ROOT import ROOT
 from DataManager.POST import POST
-from datetime import datetime
+from DataManager.POST import POST_V
 
 
 @app.route('/')
-@app.route('/home/<page>')
-def home(page=1):
-    page = int(page)
-    left_id = page*20+1
-    right_id = page*20+20
-    post_list = POST.query.filter(POST.ID >= left_id)\
-        .filter(POST.ID <= right_id).all()
-    next_url = url_for('home', page=page+1)
+@app.route('/home')
+def home():
+    post_list = POST_V.query.order_by(POST_V.pop.desc()).all()
+    next_url = url_for('home')
     return render_template(
         'index.html',
-        page=page,
         post_list=post_list,
         next_url=next_url,
     )
@@ -55,33 +54,57 @@ def controller_post():
     )
 
 
+@app.route('/controller_root', methods=['POST', 'GET'])
+def controller_root():
+    root_list = ROOT.query.all()
+    return render_template(
+        'controller_root.html',
+        root_list=root_list,
+    )
+
+
+@app.route('/controller_writer', methods=['POST', 'GET'])
+def controller_writer():
+    writer_list = WRITER.query.all()
+    return render_template(
+        'controller_writer.html',
+        writer_list=writer_list,
+    )
+
+
 @app.route('/viewer', methods=['post', 'get'])
 def viewer():
     searchType = request.form.get('searchType')
     searchTarget = request.form.get('searchTarget')
     if searchType == '标题':
-        post_list = POST.query.filter(POST.postTitle.like("%"+searchTarget+"%")).all()
+        res = POST.query.filter(POST.postTitle.like("%"+searchTarget+"%"))
     elif searchType == '内容':
-        post_list = POST.query.filter(POST.postContent.like("%"+searchTarget+"%")).all()
+        res = POST.query.filter(POST.postContent.like("%"+searchTarget+"%"))
     elif searchType == '作者':
-        post_list = POST.query.filter(POST.writerName.like("%"+searchTarget+"%")).all()
+        res = POST.query.filter(POST.writerName.like("%"+searchTarget+"%"))
     elif searchType == '现在学校':
-        post_list = POST.query.filter(POST.writerSchool.like("%"+searchTarget+"%")).all()
+        res = POST.query.filter(POST.writerSchool.like("%"+searchTarget+"%"))
     elif searchType == '目标院校':
-        post_list = POST.query.filter(POST.writerTarget.like("%"+searchTarget+"%")).all()
+        res = POST.query.filter(POST.writerTarget.like("%"+searchTarget+"%"))
     else:
-        post_list = []
+        pass
+    post_list = res.all()
+    res_cnt = res.count()
     return render_template(
         'viewer.html',
         post_list=post_list,
         searchType=searchType,
         searchTarget=searchTarget,
+        res_cnt=res_cnt,
     )
 
 
 @app.route('/detail_post/<postID>', methods=['post', 'get'])
 def detail_post(postID):
     post = POST.query.filter(POST.ID == postID).first()
+    if post is not None:
+        if post.writerYear is None:
+            post.writerYear = 0
     return render_template(
         'detail_post.html',
         post=post,
@@ -90,7 +113,6 @@ def detail_post(postID):
 
 @app.route('/update_post', methods=['post', 'get'])
 def update_post():
-    session = db.session
     ID = request.form.get('ID')
     url = request.form.get('url')
     postTime = request.form.get('postTime')
@@ -100,7 +122,7 @@ def update_post():
     writerYear = request.form.get('writerYear')
     writerSchool = request.form.get('writerSchool')
     writerTarget = request.form.get('writerTarget')
-
+    session = db.session
     post = POST.query.filter_by(ID=ID).first()
     if post is None:
         post = POST(ID=ID, url=url, postTime=postTime, postTitle=postTitle,
@@ -117,6 +139,7 @@ def update_post():
         post.writerSchool = writerSchool
         post.writerTarget = writerTarget
     session.commit()
+    session.close()
     return redirect(url_for('controller_post'))
 
 
@@ -129,4 +152,40 @@ def delete_post(postID):
     else:
         session.delete(post)
     session.commit()
+    session.close()
     return redirect(url_for('controller_post'))
+
+
+@app.route('/overview')
+def overview():
+    session = db.session
+    likes_sum = POST.query.with_entities(func.sum(POST.likes)).first()[0]
+    likes_max = POST.query.with_entities(func.max(POST.likes)).first()[0]
+    likes_avg = POST.query.with_entities(func.avg(POST.likes)).first()[0]
+    favor_sum = POST.query.with_entities(func.sum(POST.favorites)).first()[0]
+    favor_max = POST.query.with_entities(func.max(POST.favorites)).first()[0]
+    favor_avg = POST.query.with_entities(func.avg(POST.favorites)).first()[0]
+    add_sum = POST.query.with_entities(func.sum(POST.additions)).first()[0]
+    add_max = POST.query.with_entities(func.max(POST.additions)).first()[0]
+    school_list = session.query(func.count(POST.writerSchool), POST.writerSchool)\
+        .group_by(POST.writerSchool).order_by(func.count(POST.writerSchool).desc()).limit(10).all()
+    target_list = session.query(func.count(POST.writerTarget), POST.writerTarget) \
+        .group_by(POST.writerTarget).order_by(func.count(POST.writerTarget).desc()).limit(10).all()
+    year_list = session.query(func.count(POST.writerYear), POST.writerYear) \
+        .group_by(POST.writerYear).order_by(func.count(POST.writerYear).desc()).limit(5).all()
+    session.close()
+    return render_template(
+        'overview.html',
+        likes_sum=likes_sum,
+        likes_max=likes_max,
+        likes_avg=likes_avg,
+        favor_sum=favor_sum,
+        favor_max=favor_max,
+        favor_avg=favor_avg,
+        add_sum=add_sum,
+        add_max=add_max,
+        school_list=school_list,
+        target_list=target_list,
+        year_list=year_list,
+
+    )

@@ -1,8 +1,8 @@
 {% extends "bootstrap/base.html"  %}
 {% block navbar %}
-    <!--搜索结果页-->
-    <div style="background-image: url('/static/images/bg1.jpg'); background-size: contain;">
-        <div class="container" style="min-height: 800px">
+    <!--主页-->
+    <div style="background-image: url('/static/images/bg1.jpg'); background-size:contain">
+        <div class="container"  style="min-height: 800px">
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <!--导航栏-->
@@ -13,10 +13,10 @@
                         <!--导航栏搜索框-->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
-                                <li class="active">
+                                <li>
                                      <a href={{  url_for('home') }}>主页</a>
                                 </li>
-                                <li>
+                                <li class="active">
                                      <a href={{  url_for('overview') }}>统计</a>
                                 </li>
                                 <script type="text/javascript">
@@ -52,9 +52,8 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li><a href="#">管理员登录</a></li>
                                 <li class="dropdown">
-                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
                                     <ul class="dropdown-menu">
-
                                         <li><a href="#">修改密码</a></li>
                                         <li class="divider"></li>
                                         <li><a href="#">退出登录</a></li>
@@ -62,59 +61,68 @@
                                 </li>
                                 <li><a href={{ url_for('controller_post') }}>控制台</a></li>
                             </ul>
+
                         </div>
                     </nav>
-
-                    <div class="alert alert-warning">
-                        <a href="#" class="close" data-dismiss="alert">&times;</a>
-                        <strong>"{{ searchType }} = {{ searchTarget }}"</strong>的搜索结果，共<strong>{{ res_cnt }}</strong>个。
+                </div>
+            </div>
+            <!--统计列表-->
+            <div class="row clearfix">
+                <div class="col-md-6 column">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">点赞统计</h3>
+                        </div>
+                        <div class="panel-body">总计：{{ likes_sum }}</div>
+                        <div class="panel-body">最多：{{ likes_max }}</div>
+                        <div class="panel-body">平均：{{ likes_avg }}</div>
+                        <div class="panel-footer">点赞与分享者共勉~</div>
                     </div>
-
-                    {% if post_list %}
-                        <!--展示搜索结果-->
-                        <div class="panel-group" id="panel-422177">
-                            {% for post in post_list %}
-                            <div class="panel panel-default">
-                                <div class="list-group-item">
-                                    {% if post.additions == 1 %}
-                                        <span class="badge">1</span>
-                                    {% endif %}
-                                    <a class="panel-title" data-toggle="collapse" data-parent="#panel-422177" href="#panel-element-{{ post.ID }}">
-                                        {{ post.postTitle }}
-                                    </a>
-                                </div>
-                                <div id="panel-element-{{ post.ID }}" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        {{ post.postContent }}
-                                    </div>
-                                    <div class="list-group">
-                                        <div class="list-group-item active">作者：{{ post.writerName }}</div>
-                                        <div class="list-group-item">考研年份：{{ post.writerYear }}</div>
-                                        <div class="list-group-item">现在院校：{{ post.writerSchool }}</div>
-                                        <div class="list-group-item">目标院校：{{ post.writerTarget }}</div>
-                                        <div class="list-group-item">{{ post.postTime }}</div>
-                                    </div>
-                                </div>
-                                <div class="btn-group" >
-                                    <button type="button" class="btn btn-primary">浏览：{{ post.watches }}</button>
-                                    <button type="button" class="btn btn-info">回复：{{ post.replies }}</button>
-                                    <button type="button" class="btn btn-success">收藏：{{ post.favorites }}</button>
-                                    <button type="button" class="btn btn-danger">点赞：{{ post.likes }}</button>
-                                    {% if post.additions == 1 %}
-                                        <button class="btn" type="button">含有附件</button>
-                                    {% endif %}
-                                    <button type="button" class="btn btn-warning" onclick="window.open('{{ post.url }}')">转到来源</button>
-                                </div>
-                            </div>
-                            {% endfor %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">讨论氛围最热烈的学校</h3>
                         </div>
-                    {% else %}
-                        <!--无结果时提示-->
-                        <div style="height: 600px; background: white; opacity: 80%;" >
-                            <div style="position: absolute; top: 50%; right: 50%">暂无相关内容</div>
+                        {% for it in school_list %}
+                        <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
+                        {% endfor %}
+                        <div class="panel-footer">与同学们共同努力吧~</div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">最多人备考的年份</h3>
                         </div>
-                    {% endif %}
-
+                        {% for it in year_list %}
+                        <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
+                        {% endfor %}
+                        <div class="panel-footer">现在哪一年的竞争最激烈呢~</div>
+                    </div>
+                </div>
+                <div class="col-md-6 column">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">附件统计</h3>
+                        </div>
+                        <div class="panel-body">总计：{{ add_sum }}</div>
+                        <div class="panel-footer">把复习资料统统搬走~</div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">收藏统计</h3>
+                        </div>
+                        <div class="panel-body">总计：{{ favor_sum }}</div>
+                        <div class="panel-body">最多：{{ favor_max }}</div>
+                        <div class="panel-body">平均：{{ favor_avg }}</div>
+                        <div class="panel-footer">收藏好贴很重要~</div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">最多人梦寐以求的学校</h3>
+                        </div>
+                        {% for it in target_list %}
+                        <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
+                        {% endfor %}
+                        <div class="panel-footer">追梦路上无数人与你并行~</div>
+                    </div>
 
                 </div>
             </div>

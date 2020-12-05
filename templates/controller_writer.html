@@ -1,8 +1,23 @@
 {% extends "bootstrap/base.html"  %}
 {% block navbar %}
-    <!--搜索结果页-->
+    <!--侧边栏导航-->
+    <ul class="nav nav-list well" style="position: fixed; width: 10%; height:100%; z-index: 10">
+        <li class="nav-header">命令</li>
+        <li><a href={{ url_for('detail_post',postID=-1) }}>新建作者</a></li>
+        <li class="nav-header">数据库</li>
+        <li><a href={{ url_for('controller_post') }}>帖子</a></li>
+        <li><a href={{ url_for('controller_writer') }}>作者</a></li>
+        <li><a href={{ url_for('controller_root') }}>管理员</a></li>
+        <li class="divider"></li>
+        <li class="nav-header">其他</li>
+        <li><a href="https://github.com/ArComet/SQLtest">帮助</a></li>
+        <li><a href={{ url_for('home') }}>退出控制台</a></li>
+    </ul>
+
+
+    <!--数据控制台-->
     <div style="background-image: url('/static/images/bg1.jpg'); background-size: contain;">
-        <div class="container" style="min-height: 800px">
+        <div class="container"  style="min-height: 800px">
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <!--导航栏-->
@@ -41,7 +56,7 @@
                                 </li>
                             </ul>
                             <!--搜索表单-->
-                            <form class="navbar-form navbar-left" role="search" action={{ url_for("viewer") }} method="POST">
+                            <form class="navbar-form navbar-left" role="search" action={{ url_for("controller_post") }} method="POST">
                                 <label>
                                     <input name="searchTarget" type="text" class="form-control" />
                                     <input id="searchType" name="searchType" type="text" class="form-control" style="display: none" value="标题"/>
@@ -65,46 +80,25 @@
                         </div>
                     </nav>
 
-                    <div class="alert alert-warning">
-                        <a href="#" class="close" data-dismiss="alert">&times;</a>
-                        <strong>"{{ searchType }} = {{ searchTarget }}"</strong>的搜索结果，共<strong>{{ res_cnt }}</strong>个。
-                    </div>
-
-                    {% if post_list %}
+                    {% if writer_list %}
                         <!--展示搜索结果-->
                         <div class="panel-group" id="panel-422177">
-                            {% for post in post_list %}
+                            {% for writer in writer_list %}
                             <div class="panel panel-default">
                                 <div class="list-group-item">
-                                    {% if post.additions == 1 %}
-                                        <span class="badge">1</span>
-                                    {% endif %}
-                                    <a class="panel-title" data-toggle="collapse" data-parent="#panel-422177" href="#panel-element-{{ post.ID }}">
-                                        {{ post.postTitle }}
+                                    <a class="panel-title" data-toggle="collapse" data-parent="#panel-422177" href="#panel-element-{{ writer.writerName }}">
+                                        {{ writer.writerName }}
                                     </a>
                                 </div>
-                                <div id="panel-element-{{ post.ID }}" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        {{ post.postContent }}
-                                    </div>
+                                <div id="panel-element-{{ writer.writerName }}" class="panel-collapse collapse">
                                     <div class="list-group">
-                                        <div class="list-group-item active">作者：{{ post.writerName }}</div>
-                                        <div class="list-group-item">考研年份：{{ post.writerYear }}</div>
-                                        <div class="list-group-item">现在院校：{{ post.writerSchool }}</div>
-                                        <div class="list-group-item">目标院校：{{ post.writerTarget }}</div>
-                                        <div class="list-group-item">{{ post.postTime }}</div>
+                                        <div class="list-group-item">考研年份：{{ writer.writerYear }}</div>
+                                        <div class="list-group-item">现在院校：{{ writer.writerSchool }}</div>
+                                        <div class="list-group-item">目标院校：{{ writer.writerTarget }}</div>
+                                        <div class="list-group-item">{{ writer.postTime }}</div>
                                     </div>
                                 </div>
-                                <div class="btn-group" >
-                                    <button type="button" class="btn btn-primary">浏览：{{ post.watches }}</button>
-                                    <button type="button" class="btn btn-info">回复：{{ post.replies }}</button>
-                                    <button type="button" class="btn btn-success">收藏：{{ post.favorites }}</button>
-                                    <button type="button" class="btn btn-danger">点赞：{{ post.likes }}</button>
-                                    {% if post.additions == 1 %}
-                                        <button class="btn" type="button">含有附件</button>
-                                    {% endif %}
-                                    <button type="button" class="btn btn-warning" onclick="window.open('{{ post.url }}')">转到来源</button>
-                                </div>
+                                <a class="btn btn-link" href={{ url_for('detail_post',postID=writer.writerName) }}>编辑</a>
                             </div>
                             {% endfor %}
                         </div>

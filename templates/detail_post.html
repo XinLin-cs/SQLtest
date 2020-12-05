@@ -2,8 +2,14 @@
 {% block navbar %}
     <!--侧边栏导航-->
     <ul class="nav nav-list well" style="position: fixed; width: 10%; height:100%; z-index: 10">
-        <li class="nav-header">修改帖子</li>
-        <li><a href={{ url_for('delete_post',postID=post.ID) }}>删除</a></li>
+        {% if post %}
+            <li class="nav-header">修改帖子</li>
+            <br>
+            <li><a href={{ url_for('delete_post',postID=post.ID) }}>删除</a></li>
+        {% else %}
+            <li class="nav-header">新建帖子</li>
+            <br>
+        {% endif %}
         <li><a href="#" onclick="window.history.back()">取消</a></li>
     </ul>
 
@@ -12,20 +18,24 @@
         <div class="container"  style="min-height: 800px">
             <div class="row clearfix">
                 <div class="col-md-12 column">
+                    <div class="alert alert-warning">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <strong>(*)</strong>为必填，其余可选填。
+                    </div>
                     <form class="form" role="update" action={{ url_for("update_post") }} method="POST">
                       <div class="form-group">
-                        <label for="name">ID</label>
+                        <label for="name">*ID</label>
                         <input type="text" class="form-control" name="ID" placeholder="请输入名称" value={{ post.ID }}>
                       <div class="form-group">
-                        <label for="name">url</label>
+                        <label for="name">*url</label>
                         <input type="text" class="form-control" name="url" placeholder="请输入名称" value={{ post.url }}>
                       </div>
                       <div class="form-group">
-                        <label for="name">postTime</label>
+                        <label for="name">*postTime</label>
                         <input type="text" class="form-control" name="postTime" placeholder="请输入名称" value={{ post.postTime }}>
                       </div>
                         <div class="form-group">
-                        <label for="name">postTitle</label>
+                        <label for="name">*postTitle</label>
                         <input type="text" class="form-control" name="postTitle" placeholder="请输入名称" value={{ post.postTitle }}>
                       </div>
                         <div class="form-group">
@@ -33,7 +43,7 @@
                         <input type="text" class="form-control" name="postContent" placeholder="请输入名称" value={{ post.postContent }}>
                       </div>
                         <div class="form-group">
-                        <label for="name">writerName</label>
+                        <label for="name">*writerName</label>
                         <input type="text" class="form-control" name="writerName" placeholder="请输入名称" value={{ post.writerName }}>
                       </div>
                         <div class="form-group">
