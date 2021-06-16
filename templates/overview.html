@@ -8,7 +8,7 @@
                     <!--导航栏-->
                     <nav class="navbar navbar-inverse" role="navigation">
                         <div class="navbar-header">
-                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href={{ url_for('home') }}>SQLtest</a>
+                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href={{ url_for('home') }}>DOGE</a>
                         </div>
                         <!--导航栏搜索框-->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -68,7 +68,7 @@
             </div>
             <!--统计列表-->
             <div class="row clearfix">
-                <div class="col-md-6 column">
+                <div class="col-md-4 column">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">点赞统计</h3>
@@ -80,24 +80,15 @@
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">讨论氛围最热烈的学校</h3>
+                            <h3 class="panel-title">最多人梦寐以求的学校</h3>
                         </div>
-                        {% for it in school_list %}
+                        {% for it in target_list %}
                         <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
                         {% endfor %}
-                        <div class="panel-footer">与同学们共同努力吧~</div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">最多人备考的年份</h3>
-                        </div>
-                        {% for it in year_list %}
-                        <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
-                        {% endfor %}
-                        <div class="panel-footer">现在哪一年的竞争最激烈呢~</div>
+                        <div class="panel-footer">追梦路上无数人与你并行~</div>
                     </div>
                 </div>
-                <div class="col-md-6 column">
+                <div class="col-md-4 column">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">附件统计</h3>
@@ -116,14 +107,24 @@
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">最多人梦寐以求的学校</h3>
+                            <h3 class="panel-title">最多人备考的年份</h3>
                         </div>
-                        {% for it in target_list %}
+                        {% for it in year_list %}
                         <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
                         {% endfor %}
-                        <div class="panel-footer">追梦路上无数人与你并行~</div>
+                        <div class="panel-footer">现在哪一年的竞争最激烈呢~</div>
                     </div>
-
+                </div>
+                <div class="col-md-4 column">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">讨论氛围最热烈的学校</h3>
+                        </div>
+                        {% for it in school_list %}
+                        <div class="panel-body">{{ it[1] }}：{{ it[0] }} 帖</div>
+                        {% endfor %}
+                        <div class="panel-footer">与同学们共同努力吧~</div>
+                    </div>
                 </div>
             </div>
         </div>
