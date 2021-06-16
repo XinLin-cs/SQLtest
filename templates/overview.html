@@ -1,5 +1,75 @@
 {% extends "bootstrap/base.html"  %}
 {% block navbar %}
+    <style>
+
+    .animated{
+        -webkit-animation-duration: 2s;
+        animation-duration: 2s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both
+    }
+    {#从右滑动进入动画#}
+    @-webkit-keyframes slideInRight {
+        0% {
+            -webkit-transform: translateX(400%);
+            transform: translateX(400%);
+            visibility: visible
+        }}
+
+    @keyframes slideInRight {
+        0% {
+            -webkit-transform: translateX(400%);
+            -ms-transform: translateX(400%);
+            transform: translateX(400%);
+            visibility: visible
+        }}
+
+    .slideInRight {
+        -webkit-animation-name: slideInRight;
+        animation-name: slideInRight
+    }
+    {#从左滑动进入动画#}
+    @-webkit-keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-400%);
+            transform: translateX(-400%);
+            visibility: visible
+        }}
+
+    @keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-400%);
+            -ms-transform: translateX(-400%);
+            transform: translateX(-400%);
+            visibility: visible
+        }}
+
+    .slideInLeft {
+        -webkit-animation-name: slideInLeft;
+        animation-name: slideInLeft
+    }
+
+    {#从上滑动进入动画#}
+    @-webkit-keyframes slideInUp {
+        0% {
+            -webkit-transform: translateY(-400%);
+            transform: translateY(-400%);
+            visibility: visible
+        }}
+
+    @keyframes slideInUp {
+        0% {
+            -webkit-transform: translateY(-400%);
+            -ms-transform: translateY(-400%);
+            transform: translateY(-400%);
+            visibility: visible
+        }}
+
+    .slideInUp {
+        -webkit-animation-name: slideInUp;
+        animation-name: slideInUp
+    }
+    </style>
     <!--主页-->
     <div style="background-image: url('/static/images/bg1.jpg'); background-size:contain">
         <div class="container"  style="min-height: 800px">
@@ -69,7 +139,7 @@
             <!--统计列表-->
             <div class="row clearfix">
                 <div class="col-md-4 column">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default animated slideInUp" style="animation-delay: 0.5s">
                         <div class="panel-heading">
                             <h3 class="panel-title">点赞统计</h3>
                         </div>
@@ -78,7 +148,7 @@
                         <div class="panel-body">平均：{{ likes_avg }}</div>
                         <div class="panel-footer">点赞与分享者共勉~</div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default animated slideInLeft" style="animation-delay: 1s">
                         <div class="panel-heading">
                             <h3 class="panel-title">最多人梦寐以求的学校</h3>
                         </div>
@@ -89,14 +159,14 @@
                     </div>
                 </div>
                 <div class="col-md-4 column">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default animated slideInLeft" style="animation-delay: 0s">
                         <div class="panel-heading">
                             <h3 class="panel-title">附件统计</h3>
                         </div>
                         <div class="panel-body">总计：{{ add_sum }}</div>
                         <div class="panel-footer">把复习资料统统搬走~</div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default animated slideInRight" style="animation-delay: 2s">
                         <div class="panel-heading">
                             <h3 class="panel-title">收藏统计</h3>
                         </div>
@@ -105,7 +175,7 @@
                         <div class="panel-body">平均：{{ favor_avg }}</div>
                         <div class="panel-footer">收藏好贴很重要~</div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default animated slideInRight" style="animation-delay: 1.5s">
                         <div class="panel-heading">
                             <h3 class="panel-title">最多人备考的年份</h3>
                         </div>
@@ -116,7 +186,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 column">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default animated slideInUp" style="animation-delay: 2.5s">
                         <div class="panel-heading">
                             <h3 class="panel-title">讨论氛围最热烈的学校</h3>
                         </div>

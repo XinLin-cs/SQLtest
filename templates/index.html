@@ -1,22 +1,14 @@
 {% extends "bootstrap/base.html"  %}
 {% block navbar %}
     <style>
-    {#从右滑动进入动画#}
-    .animated-1 {
+
+    .animated{
         -webkit-animation-duration: 2s;
         animation-duration: 2s;
         -webkit-animation-fill-mode: both;
         animation-fill-mode: both
     }
-
-    .animated-2 {
-        -webkit-animation-duration: 2s;
-        animation-duration: 2s;
-        -webkit-animation-fill-mode: both;
-        animation-fill-mode: both;
-        animation-delay: 1s;
-    }
-
+    {#从右滑动进入动画#}
     @-webkit-keyframes slideInRight {
         0% {
             -webkit-transform: translateX(150%);
@@ -36,9 +28,62 @@
         -webkit-animation-name: slideInRight;
         animation-name: slideInRight
     }
+    {#从左滑动进入动画#}
+    @-webkit-keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-150%);
+            transform: translateX(-150%);
+            visibility: visible
+        }}
+
+    @keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-150%);
+            -ms-transform: translateX(-150%);
+            transform: translateX(-150%);
+            visibility: visible
+        }}
+
+    .slideInLeft {
+        -webkit-animation-name: slideInLeft;
+        animation-name: slideInLeft
+    }
+
+    @-webkit-keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(0,100%,0);
+            transform: translate3d(0,100%,0)
+        }}
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(0,100%,0);
+            -ms-transform: translate3d(0,100%,0);
+            transform: translate3d(0,100%,0)
+        }}
+
+    .fadeInUp {
+        -webkit-animation-name: fadeInUp;
+        animation-name: fadeInUp
+    }
     </style>
     <script>
     </script>
+    <!--侧边栏导航-->
+    <ul class="nav nav-list well animated slideInLeft" style="animation-delay:0.5s; position: fixed; width: 10%; height:100%; z-index: 10">
+        <li class="nav-header">快速跳转</li>
+        <li><a onclick="window.open('https://yz.chsi.com.cn/yzwb/')">统考报名</a></li>
+        <li><a onclick="window.open('https://yz.chsi.com.cn/apply/cjcx/')">成绩查询</a></li>
+        <li><a onclick="window.open('https://yz.chsi.com.cn/yztj/')">调剂系统</a></li>
+        <li><a onclick="window.open('https://www.chsi.com.cn/')">学信网</a></li>
+        <li class="nav-header">友情链接</li>
+        <li><a onclick="window.open('http://www.cskaoyan.com/forum.php')">王道论坛</a></li>
+        <li class="nav-header">支持作者</li>
+        <li><a onclick="window.open('https://github.com/ArComet')">github</a></li>
+        <li><a onclick="window.open('https://www.cnblogs.com/fzulinxin/')">博客园</a></li>
+    </ul>
     <!--主页-->
     <div style="background-image: url('/static/images/bg1.jpg'); background-size:contain">
         <div class="container"  style="min-height: 800px">
@@ -104,29 +149,33 @@
                         </div>
                     </nav>
                     <!--横幅-->
-                    <div class="jumbotron animated-1 slideInRight">
-                        <h1>
-                            <img style="width:10%;border-radius: 50%" src="https://static.wikia.nocookie.net/dogeshibe/images/1/1d/29513201_2093062984053920_1254481581414956582_n.jpg">
-                            研招Doge
-                        </h1>
+                    <div class="jumbotron animated slideInRight">
+                        <div style="text-align: right ;float:right">
+                             <a class="btn btn-primary btn-large" onclick="window.open('https://yz.chsi.com.cn/')">中国研招网 »</a>
+                        </div>
+
+                        <div align="left" >
+                            <h1>
+                                <img style="width:10%;border-radius: 50%" src="https://static.wikia.nocookie.net/dogeshibe/images/1/1d/29513201_2093062984053920_1254481581414956582_n.jpg">
+                                研招Doge
+                            </h1>
 
 
-                        <h2>
-                           迅速获取时下最热的计算机升学资讯
-                        </h2>
-                        <br>
-                        <br>
-                        <div style="text-align: right">
-                             <p>不积跬步无以至千里，不积小流无以成江海。————荀子</p>
+                            <h2>
+                               迅速高效地获取时下最热的计算机升学资讯
+                            </h2>
+                            <br>
+                            <div style="text-align: right">
+                                 <p>不积跬步无以至千里，不积小流无以成江海。————荀子</p>
+                            </div>
                         </div>
-                        <div style="text-align: right">
-                             <a class="btn btn-primary btn-large" href="https://yz.chsi.com.cn/">中国研招网 »</a>
-                        </div>
+
+
                     </div>
                     <!--帖子列表-->
-                    <div class="panel-group animated-2 slideInRight" id="panel-422177">
+                    <div class="panel-group" id="panel-422177">
                         {% for post in post_list %}
-                            <div class="panel panel-default">
+                            <div class="panel panel-default animated fadeInUp" style="animation-delay: {{ 20000/post.pop }}s">
                                 <div class="list-group-item">
 
                                     <span class="badge">热度：{{ post.pop }}</span>
@@ -150,18 +199,17 @@
                                         <div class="list-group-item">{{ post.postTime }}</div>
                                     </div>
                                 </div>
-                                <div class="btn-group" >
-                                    <button type="button" class="btn btn-primary">浏览：{{ post.watches }}</button>
-                                    <button type="button" class="btn btn-info">回复：{{ post.replies }}</button>
-                                    <button type="button" class="btn btn-success">收藏：{{ post.favorites }}</button>
-                                    <button type="button" class="btn btn-danger">点赞：{{ post.likes }}</button>
+                                <div>
+                                    浏览：{{ post.watches }}
+                                    回复：{{ post.replies }}
+                                    收藏：{{ post.favorites }}
+                                    点赞：{{ post.likes }}
                                     {% if post.additions == 1 %}
-                                        <button class="btn" type="button">含有附件</button>
+                                        含有附件
                                     {% endif %}
-
                                 </div>
                             </div>
-
+                            <br>
                         {% endfor %}
                     </div>
                 </div>
