@@ -21,104 +21,12 @@
             <div class="row clearfix">
                 <div class="col-md-12 column">
                     <!--导航栏-->
-                    <nav class="navbar navbar-inverse" role="navigation">
-                        <div class="navbar-header">
-                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href={{ url_for('home') }}>DOGE</a>
-                        </div>
-                        <!--导航栏搜索框-->
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                <li class="active">
-                                     <a href={{  url_for('home') }}>主页</a>
-                                </li>
-                                <li>
-                                     <a href={{  url_for('overview') }}>统计</a>
-                                </li>
-                                <script type="text/javascript">
-                                    function change_searchType(text) {
-                                        document.getElementById("dropdown").innerText=text;
-                                        document.getElementById("searchType").value=text;
-                                    }
-                                </script>
-                                <li class="dropdown">
-                                    <a href="#"  class="dropdown-toggle" data-toggle="dropdown">
-                                        <block id="dropdown">标题</block>
-                                        <strong class="caret"></strong>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#" onclick="change_searchType('标题')">标题</a></li>
-                                        <li><a href="#" onclick="change_searchType('内容')">内容</a></li>
-                                        <li><a href="#" onclick="change_searchType('作者')">作者</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" onclick="change_searchType('现在学校')">现在学校</a></li>
-                                        <li><a href="#" onclick="change_searchType('目标院校')">目标院校</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <!--搜索表单-->
-                            <form class="navbar-form navbar-left" role="search" action={{ url_for("controller_post") }} method="POST">
-                                <label>
-                                    <input name="searchTarget" type="text" class="form-control" />
-                                    <input id="searchType" name="searchType" type="text" class="form-control" style="display: none" value="标题"/>
-                                </label>
-                                <button type="submit" class="btn btn-default">搜索</button>
-                            </form>
-                            <!--导航栏登录选项-->
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a href="#">管理员登录</a></li>
-                                <li class="dropdown">
-                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<strong class="caret"></strong></a>
-                                    <ul class="dropdown-menu">
-
-                                        <li><a href="#">修改密码</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">退出登录</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href={{ url_for('controller_post') }}>控制台</a></li>
-                            </ul>
-                        </div>
-                    </nav>
+                    {% include "./Navbar.html" %}
 
                     {% if post_list %}
                         <!--展示搜索结果-->
-                        <div class="panel-group" id="panel-422177">
-                            {% for post in post_list %}
-                            <div class="panel panel-default">
-                                <div class="list-group-item">
-                                    {% if post.additions == 1 %}
-                                        <span class="badge">1</span>
-                                    {% endif %}
-                                    <a class="panel-title" data-toggle="collapse" data-parent="#panel-422177" href="#panel-element-{{ post.ID }}">
-                                        {{ post.postTitle }}
-                                    </a>
-                                </div>
-                                <div id="panel-element-{{ post.ID }}" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        {{ post.postContent }}
-                                    </div>
-                                    <div class="list-group">
-                                        <div class="list-group-item active">作者：{{ post.writerName }}</div>
-                                        <div class="list-group-item">考研年份：{{ post.writerYear }}</div>
-                                        <div class="list-group-item">现在院校：{{ post.writerSchool }}</div>
-                                        <div class="list-group-item">目标院校：{{ post.writerTarget }}</div>
-                                        <div class="list-group-item">{{ post.postTime }}</div>
-                                    </div>
-                                </div>
-                                <div class="btn-group" >
-                                    <button type="button" class="btn btn-primary">浏览：{{ post.watches }}</button>
-                                    <button type="button" class="btn btn-info">回复：{{ post.replies }}</button>
-                                    <button type="button" class="btn btn-success">收藏：{{ post.favorites }}</button>
-                                    <button type="button" class="btn btn-danger">点赞：{{ post.likes }}</button>
-                                    {% if post.additions == 1 %}
-                                        <button class="btn" type="button">含有附件</button>
-                                    {% endif %}
-                                    <button type="button" class="btn btn-warning" onclick="window.open('{{ post.url }}')">转到来源</button>
-                                </div>
-                                <a class="btn btn-link" href={{ url_for('detail_post',postID=post.ID) }}>编辑</a>
-                            </div>
-                            {% endfor %}
-                        </div>
+                        <!--帖子列表-->
+                        {% include "Postlist.html" %}
                     {% else %}
                         <!--无结果时提示-->
                         <div style="height: 600px; background: white; opacity: 80%;" >

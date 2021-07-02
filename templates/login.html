@@ -1,0 +1,136 @@
+{% extends "bootstrap/base.html"  %}
+{% block navbar %}
+    <style>
+
+    .animated{
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both
+    }
+    {#从右滑动进入动画#}
+    @-webkit-keyframes slideInRight {
+        0% {
+            -webkit-transform: translateX(400%);
+            transform: translateX(400%);
+            visibility: visible
+        }}
+
+    @keyframes slideInRight {
+        0% {
+            -webkit-transform: translateX(400%);
+            -ms-transform: translateX(400%);
+            transform: translateX(400%);
+            visibility: visible
+        }}
+
+    .slideInRight {
+        -webkit-animation-name: slideInRight;
+        animation-name: slideInRight
+    }
+    {#从左滑动进入动画#}
+    @-webkit-keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-400%);
+            transform: translateX(-400%);
+            visibility: visible
+        }}
+
+    @keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-400%);
+            -ms-transform: translateX(-400%);
+            transform: translateX(-400%);
+            visibility: visible
+        }}
+
+    .slideInLeft {
+        -webkit-animation-name: slideInLeft;
+        animation-name: slideInLeft
+    }
+
+    {#从上滑动进入动画#}
+    @-webkit-keyframes slideInUp {
+        0% {
+            -webkit-transform: translateY(-400%);
+            transform: translateY(-400%);
+            visibility: visible
+        }}
+
+    @keyframes slideInUp {
+        0% {
+            -webkit-transform: translateY(-400%);
+            -ms-transform: translateY(-400%);
+            transform: translateY(-400%);
+            visibility: visible
+        }}
+
+    .slideInUp {
+        -webkit-animation-name: slideInUp;
+        animation-name: slideInUp
+    }
+
+    @-webkit-keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(0,50%,0);
+            transform: translate3d(0,50%,0)
+        }}
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(0,50%,0);
+            -ms-transform: translate3d(0,50%,0);
+            transform: translate3d(0,50%,0)
+        }}
+
+    .fadeInUp {
+        -webkit-animation-name: fadeInUp;
+        animation-name: fadeInUp
+    }
+    </style>
+    <!--主页-->
+    <div style="background-image: url('/static/images/bg3.jpg'); background-size:contain">
+        <div class="container"  style="min-height: 800px;">
+            <div class="row clearfix" >
+                <div class="col-md-12 column">
+                    <!--导航栏-->
+                    {% include "Navbar.html" %}
+                </div>
+                <div class="col-md-4 column" ></div>
+                <div class="col-md-4 column animated fadeInUp" style="border-radius:10%;background-color: rgba(255,255,255,0.7)">
+                    <div style="height: 50px"></div>
+
+                    <div style="text-align: center">
+                        <img style="width:40%;border-radius: 30%" src="https://static.wikia.nocookie.net/dogeshibe/images/1/1d/29513201_2093062984053920_1254481581414956582_n.jpg">
+                        <div style="height: 50px"></div>
+                    </div>
+
+                    <form role="form" action={{ url_for("login_int") }} method="POST">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">用户名</label>
+                            <input name="uid" type="tel" class="form-control" id="uid" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">密码</label>
+                            <input name="password" type="password" class="form-control" id="password" />
+                        </div>
+                        <div style="height: 25px"></div>
+                        <div style="text-align: center; color: crimson">
+                            {{ msg }}
+                        </div>
+                        <div style="height: 25px"></div>
+                        <div style="text-align: center">
+                            <button type="submit" class="btn btn-primary">管理员登录</button>
+                        </div>
+
+                    </form>
+                    <div style="height: 100px"></div>
+                </div>
+            </div>
+            <!--登录表单-->
+
+        </div>
+    </div>
+{% endblock %}

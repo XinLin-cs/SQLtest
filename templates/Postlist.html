@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="cn">
+<style>
+
+    .animated{
+        -webkit-animation-duration: 2s;
+        animation-duration: 2s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both
+    }
+    {#从右滑动进入动画#}
+    @-webkit-keyframes slideInRight {
+        0% {
+            -webkit-transform: translateX(150%);
+            transform: translateX(150%);
+            visibility: visible
+        }}
+
+    @keyframes slideInRight {
+        0% {
+            -webkit-transform: translateX(150%);
+            -ms-transform: translateX(150%);
+            transform: translateX(150%);
+            visibility: visible
+        }}
+
+    .slideInRight {
+        -webkit-animation-name: slideInRight;
+        animation-name: slideInRight
+    }
+    {#从左滑动进入动画#}
+    @-webkit-keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-150%);
+            transform: translateX(-150%);
+            visibility: visible
+        }}
+
+    @keyframes slideInLeft {
+        0% {
+            -webkit-transform: translateX(-150%);
+            -ms-transform: translateX(-150%);
+            transform: translateX(-150%);
+            visibility: visible
+        }}
+
+    .slideInLeft {
+        -webkit-animation-name: slideInLeft;
+        animation-name: slideInLeft
+    }
+
+    @-webkit-keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(0,100%,0);
+            transform: translate3d(0,100%,0)
+        }}
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            -webkit-transform: translate3d(0,100%,0);
+            -ms-transform: translate3d(0,100%,0);
+            transform: translate3d(0,100%,0)
+        }}
+
+    .fadeInUp {
+        -webkit-animation-name: fadeInUp;
+        animation-name: fadeInUp
+    }
+    </style>
+    <!--帖子列表-->
+                    <div class="panel-group" id="panel-422177">
+                        {% for post in post_list %}
+                            <div class="panel panel-info animated fadeInUp" {% if web_tag == 'home' %}style="animation-delay: {{ 20000/post.pop }}s"{% endif %}>
+                                <div class="panel-heading">
+                                    <div class="list-group-item">
+                                        {% if web_tag == 'home' %}
+                                            <span class="badge">热度：{{ post.pop }}</span>
+                                        {% endif %}
+                                        <a class="panel-title" data-toggle="collapse" data-parent="#panel-422177" href="#panel-element-{{ post.ID }}">
+                                            {{ post.postTitle }}
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                                <div id="panel-element-{{ post.ID }}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        {{ post.postContent }}
+                                        <div align="right">
+                                            <button type="button" class="btn btn-warning" onclick="window.open('{{ post.url }}')">转到来源</button>
+                                        </div>
+                                    </div>
+                                    <div class="list-group">
+                                        <div class="list-group-item active">作者：{{ post.writerName }}</div>
+                                        <div class="list-group-item">考研年份：{{ post.writerYear }}</div>
+                                        <div class="list-group-item">现在院校：{{ post.writerSchool }}</div>
+                                        <div class="list-group-item">目标院校：{{ post.writerTarget }}</div>
+                                        <div class="list-group-item">{{ post.postTime }}</div>
+                                    </div>
+                                </div>
+                                <div class="btn-group-sm" >
+                                    <button type="button" class="btn">浏览：{{ post.watches }}</button>
+                                    <button type="button" class="btn">回复：{{ post.replies }}</button>
+                                    <button type="button" class="btn">收藏：{{ post.favorites }}</button>
+                                    <button type="button" class="btn">点赞：{{ post.likes }}</button>
+                                    {% if post.additions == 1 %}
+                                        <button class="btn" type="button">含有附件</button>
+                                    {% endif %}
+                                    {% if uid %}
+                                        <a class="btn btn-link" href={{ url_for('detail_post',postID=post.ID) }}>编辑</a>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+                    </div>
+</html>
